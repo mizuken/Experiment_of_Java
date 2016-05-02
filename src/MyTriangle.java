@@ -1,0 +1,82 @@
+
+import java.awt.*;
+
+public class MyTriangle extends MyDrawing
+{
+	
+	//MyTriangelのコンストラクタ設定
+	public MyTriangle(int x,int y,int w,int h,
+			int r,Color lc,Color fc, int lw){
+			super(x,y,w,h,r,lc,fc,lw);
+			setType('T');
+		}
+	//座標、幅、高さ,色を指定する
+	public MyTriangle(int x,int y,int w,int h,Color lc,Color fc){
+		this(x,y,w,h,30,lc ,fc,1);
+	}
+	//座標、幅、高さを指定する
+	public MyTriangle(int x,int y,int w,int h){
+		this(x,y,w,h,30,Color.black ,Color.blue,1);
+	}
+	//座標と色を指定する
+	public MyTriangle(int x,int y, Color lc, Color fc){
+		this(x,y,30,30,30,lc,fc,1);
+	}
+	//座標を指定する
+	public MyTriangle(int x,int y){
+		this(x,y,40,40,30,Color.black ,Color.blue,1);
+	}
+	//色を指定する
+	public MyTriangle(Color lc,Color fc){
+		this(30,30,30,30,30, lc , fc,1);
+	}
+	//何も指定しない
+	public MyTriangle(){
+		this(20,20,20,20,30,Color.black ,Color.blue,1);
+	}
+	
+	public void draw(Graphics g) {
+		int x = getX();
+		int y = getY();
+		int w = getW();
+		int h = getH();
+		
+		//高さや横幅が負のときのための処理
+		/*
+		if ( w < 0 ) {
+			x += w;
+			w *= -1;
+		}
+		*/
+		/*
+		if ( h < 0 ) {
+			y += h;
+			//h *= -1;
+		}
+		*/
+		//三角形の頂点を格納する配列を用意して、座標を格納する
+		int xPoints[] = {x, x + w, x+ w/2};
+		int yPoints[] = {y, y,y+h};
+		Graphics2D g2 = (Graphics2D) g;
+		if(getShadow())
+		{
+			int xPoints_s[] = {x+5, x + w +5, x+ w/2 + 5};
+			int yPoints_s[] = {y+5, y + 5, y + h + 5};
+			g2.setStroke(new BasicStroke(getLineWidth()));
+			g2.setColor(Color.black);
+			g2.fillPolygon(xPoints_s, yPoints_s, 3);
+			g2.setColor(getLineColor());
+			g2.drawPolygon(xPoints_s, yPoints_s, 3);
+		}
+		if(getDashed()){
+			g2.setStroke(new MyDashStroke(getLineWidth()));
+		}else{
+			g2.setStroke(new BasicStroke(getLineWidth()));
+		}
+		g2.setColor(getFillColor());
+		g2.fillPolygon(xPoints, yPoints, 3);
+		g2.setColor(getLineColor());
+		g2.drawPolygon(xPoints, yPoints, 3);
+		super.draw(g);
+	}
+}
